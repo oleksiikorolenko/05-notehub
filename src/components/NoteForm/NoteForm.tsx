@@ -7,9 +7,9 @@ import type { NoteTag } from "../../types/note";
 
 const validationSchema = Yup.object({
     title: Yup.string().min(3).max(50).required(),
-  content: Yup.string().max(500),
-  tag: Yup.mixed().oneOf(['Todo', 'Work', 'Personal', 'Meeting', 'Shopping']).required(),
-})
+    content: Yup.string().max(500),
+    tag: Yup.mixed().oneOf(['Todo', 'Work', 'Personal', 'Meeting', 'Shopping']).required(),
+});
 
 
     interface NoteFormProp {
@@ -23,7 +23,7 @@ export default function NoteForm({ onClose }: NoteFormProp) {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['notes'] });
             onClose();
-        }
+        },
     });
 
     return (

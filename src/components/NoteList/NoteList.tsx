@@ -6,14 +6,14 @@ import { deleteNote } from "../../services/noteService";
 
 interface NoteListProps{
     notes: Note[];
-};
+}
 
 export default function NoteList({ notes }: NoteListProps) {
     const queryClient = useQueryClient();
 
     const mutation = useMutation({
         mutationFn: deleteNote,
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ['notes']})
+        onSuccess: () => queryClient.invalidateQueries({queryKey: ['notes']}),
     })
 
 

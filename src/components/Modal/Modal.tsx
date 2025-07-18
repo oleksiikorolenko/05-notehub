@@ -1,9 +1,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import css from "../Modal/Modal.module.css"
+import css from "../Modal/Modal.module.css";
 
-
-// const modalRoot = document.getElementById('root') as HTMLElement;
 
 interface ModalProps{
     children: React.ReactNode;
@@ -17,12 +15,12 @@ export default function Modal({ children, onClose }: ModalProps) {
         return () => window.removeEventListener('keydown', handleKey);
     }, [onClose]);
 
-    return createPortal(
-        <div className={css.backdrop} onClick={onClose}>
+  return createPortal(
+    <div className={css.backdrop} onClick={onClose}>
       <div className={css.modal} onClick={(e) => e.stopPropagation()}>
         {children}
       </div>
     </div>,
     document.body
-    )
-}
+  );
+};

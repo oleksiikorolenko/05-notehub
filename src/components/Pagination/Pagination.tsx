@@ -1,11 +1,11 @@
 import ReactPaginate from "react-paginate";
-import css from "../Pagination/Pagination.module.css"
+import css from "../Pagination/Pagination.module.css";
 
 interface PaginationProps{
     currentPage: number;
     totalPages: number;
     onPageChange: (selected: number) => void;
-};
+}
 
 export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
     return (
@@ -17,4 +17,4 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
             activeClassName={css.active}
         />
     );
-}
+};
