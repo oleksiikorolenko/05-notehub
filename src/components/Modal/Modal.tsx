@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import css from "../Modal/Modal.module.css"
 
 
-const modalRoot = document.getElementById('modal-root') as HTMLElement;
+// const modalRoot = document.getElementById('root') as HTMLElement;
 
 interface ModalProps{
     children: React.ReactNode;
@@ -23,6 +23,6 @@ export default function Modal({ children, onClose }: ModalProps) {
         {children}
       </div>
     </div>,
-    modalRoot
+    document.body
     )
 }

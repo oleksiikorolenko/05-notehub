@@ -29,10 +29,18 @@ export interface FetchNotesResponse {
     perPage: number
 }
 
-export const fetchNotes = async ({ page = 1, perPage = 12, search = '' }: FetchNotesParams): Promise<FetchNotesResponse> => {
-    const response = await axios.get('/notes', {
-        params: { page, perPage, search },
-    });
+
+
+export const fetchNotes = async ({page = 1, perPage = 12, search}: FetchNotesParams): Promise<FetchNotesResponse> => {
+    const response = await axios.get<FetchNotesResponse>('/notes', {
+        params: {
+            page,
+            perPage,
+            search
+        },
+        });
+    
+    console.log(response)
     return response.data;
 };
 
@@ -43,6 +51,7 @@ export const createNote = async (note: {
     tag: NoteTag
 }): Promise<Note> => {
     const response = await axios.post('/notes', note);
+
     return response.data;
 }
 
