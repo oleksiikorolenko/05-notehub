@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
+import { useDebounce } from 'use-debounce';
 import NoteList from '../NoteList/NoteList';
 import Paginaition from '../Pagination/Pagination';
 import SearchBox from '../SearchBox/SearchBox';
@@ -15,12 +16,18 @@ export default function App() {
   const [search, setSearch] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  const [debouncedSearch] = useDebounce(search, 300);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
  const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['notes', page, search],
+    queryKey: ['notes', page, debouncedSearch],
     queryFn: () => fetchNotes({
-      page: 1,
+      page,
       perPage: 12,
-     ...(search.trim() ? { search: search.trim() } : {})
+      search: debouncedSearch,
     }),
     placeholderData: keepPreviousData
   }
@@ -29,7 +36,7 @@ export default function App() {
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox value={search} onSearch={setSearch} />
+        <SearchBox value={search} onChange={setSearch} />
         {isLoading && <Loader />}
         {isError && <ErrorMessage />}
         {data && data.total_pages > 1 && (

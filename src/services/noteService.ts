@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { Note, NoteTag } from "../types/note";
-import toast from "react-hot-toast";
 
 
 
@@ -11,9 +10,8 @@ const myApiKey = `Bearer ${myKey}`;
 axios.defaults.headers.common['Authorization'] = myApiKey;
 
 if (!myKey) {
-    toast('VITE_NOTEHUB_TOKEN is not defined');
+  throw new Error('VITE_NOTEHUB_TOKEN is not defined. Please check your .env configuration.');
 };
-
 
 
 export interface FetchNotesParams {
@@ -62,12 +60,12 @@ export const createNote = async (note: {
     content: string;
     tag: NoteTag;
 }): Promise<Note> => {
-    const response = await axios.post('/notes', note);
+    const response = await axios.post<Note>('/notes', note);
 
     return response.data;
 };
 
 export const deleteNote = async (id: number): Promise<Note> => {
-    const response = await axios.delete(`/notes/${id}`);
+    const response = await axios.delete<Note>(`/notes/${id}`);
     return response.data;
 };

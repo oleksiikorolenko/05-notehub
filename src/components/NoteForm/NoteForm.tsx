@@ -12,11 +12,11 @@ const validationSchema = Yup.object({
 });
 
 
-    interface NoteFormProp {
+    interface NoteFormProps {
         onClose: () => void;
 }
 
-export default function NoteForm({ onClose }: NoteFormProp) {
+export default function NoteForm({ onClose }: NoteFormProps) {
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationFn: createNote,
