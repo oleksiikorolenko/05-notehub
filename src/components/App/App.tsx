@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
-import { useDebounce } from 'use-debounce';
+import { useDebouncedCallback } from 'use-debounce';
 import NoteList from '../NoteList/NoteList';
 import Paginaition from '../Pagination/Pagination';
 import SearchBox from '../SearchBox/SearchBox';
@@ -14,14 +14,18 @@ import css from '../App/App.module.css';
 export default function App() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const [debouncedSearch] = useDebounce(search, 300);
+  const handleSearch = useDebouncedCallback((search: string) => { setDebouncedSearch(search) }, 300);
 
-  useEffect(() => {
+  const handleSearchCange = (search: string) => {
+    setSearch(search);
     setPage(1);
-  }, [debouncedSearch]);
+    handleSearch(search);
+  };
 
+ 
  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['notes', page, debouncedSearch],
     queryFn: () => fetchNotes({
@@ -36,10 +40,8 @@ export default function App() {
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox value={search} onChange={setSearch} />
-        {isLoading && <Loader />}
-        {isError && <ErrorMessage />}
-        {data && data.total_pages > 1 && (
+        <SearchBox value={search} onChange={handleSearchCange} />
+       {data && data.total_pages > 1 && (
           <Paginaition
             currentPage={page}
             totalPages={data.total_pages}
@@ -48,6 +50,8 @@ export default function App() {
         )}
         <button className={css.button} type='button' onClick={() => setModalIsOpen(true)}>Create +</button>
       </header>
+       {isLoading && <Loader />}
+       {isError && <ErrorMessage />}
       {isSuccess && data?.data?.length > 0 ? (
         <NoteList notes={data.data} />)
         : (
